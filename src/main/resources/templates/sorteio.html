@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="sorteio.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&family=Roboto:wght@100&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <title>Sorteador</title>
+</head>
+<body>
+<div class="container">
+    <h2>Sorteador</h2>
+    <div class="input-group">
+        <div class="input-field">
+            <span>Quantidade</span>
+            <input id="quantidade" type="number" placeholder="1">
+        </div>
+        <div class="input-field">
+            <span>Mínimo</span>
+            <input id="minimo" type="number" placeholder="1">
+        </div>
+        <div class="input-field">
+            <span>Máximo</span>
+            <input id="maximo" type="number" placeholder="100">
+        </div>
+    </div>
+    <button id="generate">Sortear</button>
+    <div id="errorMessage"></div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#generate").click(function() {
+            validaEnvio();
+        });
+
+        function showToast(message) {
+            $("#errorMessage").text(message);
+        }
+
+        function validaEnvio() {
+            let quantidade = $("#quantidade").val();
+            let minimo = $("#minimo").val();
+            let maximo = $("#maximo").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/sorteio",
+                data: {
+                    minimo: minimo,
+                    maximo: maximo,
+                    quantidade: quantidade,
+                },
+                success: function(data) {
+
+                    window.location.href = "/resultado";
+                },
+                error: function() {
+                    showToast("Erro, tente novamente");
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>
